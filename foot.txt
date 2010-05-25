@@ -1,0 +1,9 @@
+</div>
+<div id="footer">
+	Built by Bees
+</div>
+
+<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>
+
+</body>
+</html>

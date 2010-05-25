@@ -1,0 +1,140 @@
+<?
+	header('Content-type: text/html; charset=utf-8');
+?>
+<html>
+<head>
+<title>Eternal Raid Tracker<? if ($page_title){ echo " - $page_title"; } ?></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+
+img { border: 0; }
+
+body {
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	background-color: #f5f5f5;
+	color: #333;
+}
+
+#main {
+	width: 740px;
+	margin: 10px auto;
+	text-align: left;
+	padding: 1em;
+	border: 1px solid #999;
+	background-color: #fff;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+#footer {
+	text-align: center;
+	font-family: Helvetica, Arial, sans-serif;
+	color: #666;
+	font-size: 11px;
+}
+
+h1 {
+	margin-top: 0;
+}
+
+table.calendar td {
+	text-align: center;
+	font-size: 13px;
+	line-height: 20px;
+}
+
+table.calendar td small {
+	font-size: 10px;
+}
+
+span.atnd90 { font-weight: bold; color: lime; }
+span.atnd50 { font-weight: bold; color: green; }
+span.atnd20 { font-weight: bold; color: orange; }
+span.atnd0  { font-weight: bold; color: red; }
+
+div#navi {
+	background-color: #f5f5f5;
+	padding: 4px;
+	margin-bottom: 1em;
+}
+div#navi a { text-decoration: none; }
+div#navi a:hover { text-decoration: underline; }
+
+
+</style>
+<script>
+
+function ajaxify(url, args, handler){
+
+	var req = new XMLHttpRequest();
+
+	req.onreadystatechange = function(){
+
+		var l_f = handler;
+
+		if (req.readyState == 4){
+			if (req.status == 200){
+
+				this.onreadystatechange = null;
+				try {
+					eval('var obj = '+req.responseText);
+					l_f(obj);
+				} catch (e){
+					l_f({
+						'ok'	: 0,
+						'error'	: "Exception: "+e
+					});
+				}
+			}else{
+				l_f({
+					'ok'	: 0,
+					'error'	: "Non-200 HTTP status: "+req.status,
+					'debug'	: req.responseText
+				});
+			}
+		}
+	}
+
+	req.open('POST', url, 1);
+	req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+	var args2 = [];
+	for (i in args){
+		args2[args2.length] = escape(i)+'='+encodeURIComponent(args[i]);
+	}
+
+	req.send(args2.join('&'));
+}
+
+</script>
+</head>
+<body>
+
+<div id="main">
+
+	<h1><?=$page_title?$page_title:'Eternal Raid Tracker'?></h1>
+
+	<div id="navi">
+<?
+	$navs = array(
+		'overview'	=> array('Overview', './'),
+		'calendar'	=> array('Calendar', 'calendar.php'),
+		'raids'		=> array('Raids', 'raids.php'),
+		'items'		=> array('Items', 'items.php'),
+		'players'	=> array('Players', 'players.php'),
+		'import'	=> array('Import Raid', 'import.php'),
+	);
+
+	$links = array();
+	foreach ($navs as $k => $v){
+		if ($k == $nav){
+			$links[] = "<b>$v[0]</b>";
+		}else{
+			$links[] = "<a href=\"$v[1]\">$v[0]</a>";
+		}
+	}
+
+	echo implode(' | ', $links);
+?>
+	</div>
