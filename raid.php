@@ -13,6 +13,7 @@
 ?>
 
 <p>
+	<b>Day:</b> <a href="date.php?d=<?=$raid[day]?>"><?=$raid[day]?></a><br />
 	<b>Started:</b> <?=date('Y-m-d g:ia', $raid[date_start])?><br />
 	<b>Ended:</b> <?=date('Y-m-d g:ia', $raid[date_end])?><br />
 	<b>Length:</b> <?=format_period($raid[date_end] - $raid[date_start])?><br />
@@ -137,7 +138,7 @@ function lootItem(id,state){
 	$result = db_query("SELECT * FROM attendance WHERE raid_id=$raid[id] ORDER BY player_name ASC");
 	while ($row = db_fetch_hash($result)){
 
-		$percent = min(100, round(100 * ($row[time_raid]+$row[time_wait]+600) / $duration));
+		$percent = min(100, round(100 * ($row[time_raid]+$row[time_wait]+60) / $duration));
 ?>
 	<tr>
 		<td><a href="player.php?name=<?=$row[player_name]?>"><?=$row[player_name]?></a></td>

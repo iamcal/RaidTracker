@@ -68,11 +68,11 @@
 	while ($row = db_fetch_hash($result)){
 		$raid = db_fetch_hash(db_query("SELECT * FROM raids WHERE id=$row[raid_id]"));
 		$duration = $raid[date_end] - $raid[date_start];
-		$percent = min(100, round(100 * ($row[time_raid]+$row[time_wait]+600) / $duration));
+		$percent = min(100, round(100 * ($row[time_raid]+$row[time_wait]+60) / $duration));
 		$attendance[$row[raid_id]] = $percent;
 ?>
 	<tr>
-		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid_day]?> - <?=format_zone($row[raid_zone], $row[raid_difficulty])?></a></td>
+		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid_day]?> - <?=format_zone($raid[zone], $raid[difficulty])?></a></td>
 		<td><?=format_period($row[time_raid], 1)?></td>
 		<td><?=format_period($row[time_wait], 1)?></td>
 		<td><?=format_period($row[time_offline], 1)?></td>

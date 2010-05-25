@@ -16,6 +16,7 @@
 <?
 	$result = db_query("SELECT * FROM loots ORDER BY date_drop DESC");
 	while ($row = db_fetch_hash($result)){
+		$raid = db_fetch_hash(db_query("SELECT * FROM raids WHERE id=$row[raid_id]"));
 ?>
 	<tr>
 		<td><a href="http://www.wowhead.com/item=<?=$row[item_id]?>"><img src="http://static.wowhead.com/images/wow/icons/small/<?=$row[item_icon]?>.jpg" width="18" height="18" /></a></td>
@@ -29,7 +30,7 @@
 <? }else{ ?>
 		<td>ERROR</td>
 <? } ?>
-		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid_day]?> - <?=format_zone($row[raid_zone], $row[raid_difficulty])?></a></td>
+		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid_day]?> - <?=format_zone($raid[zone], $raid[difficulty])?></a></td>
 	</tr>
 <?
 	}

@@ -16,7 +16,7 @@
 		if ($dif == '10 Player') $dif = '10';
 
 		if ($zone == 'Icecrown Citadel') $zone = 'ICC';
-		if ($zone == 'The Obsidian Sanctum') $zone = 'OS';
+		if ($zone == 'The Obsidian Sanctum') $zone = 'Sarth';
 		if ($zone == 'Vault of Archavon') $zone = 'VoA';
 		if ($zone == 'Naxxramas') $zone = 'Naxx';
 		if ($zone == 'Trial of the Crusader') $zone = 'ToC';
@@ -279,13 +279,6 @@
 		# import loot events
 		#
 
-		function get_raid_id($raids, $time){
-			foreach ($raids as $raid){
-				if ($raid[start] <= $time && $raid[end] >= $time) return $raid[id];
-			}
-			return 0;
-		}
-
 		foreach ($xml->loot->item as $item){
 
 			$time = strtotime((string) $item->time);
@@ -395,4 +388,12 @@
 			'day'		=> $day,
 		);
 	}
+
+	function get_raid_id($raids, $time){
+		foreach ($raids as $raid){
+			if ($raid[start] <= $time && $raid[end] >= $time) return $raid[id];
+		}
+		return 0;
+	}
+
 ?>
