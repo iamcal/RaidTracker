@@ -11,6 +11,8 @@
 	<tr>
 		<th>Raid</th>
 		<th>Duration</th>
+		<th>Start</th>
+		<th>End</th>
 		<th>Bosses Killed</th>
 		<th>Items Looted</th>
 		<th>Raiders</th>
@@ -26,6 +28,8 @@
 	<tr>
 		<td><a href="raid.php?id=<?=$row[id]?>"><?=$row[day]?> - <?=format_zone($row[zone], $row[difficulty])?></a></td>
 		<td><?=format_period($row[date_end] - $row[date_start], 1)?></td>
+		<td><?=format_time_only($row[date_start])?></td>
+		<td><?=format_time_only($row[date_end])?></td>
 		<td style="text-align: center"><?=$bosses?></td>
 		<td style="text-align: center"><?=$loots?></td>
 		<td style="text-align: center"><?=$players?></td>
