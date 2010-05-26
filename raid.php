@@ -117,7 +117,7 @@ function lootItem(id,state){
 	if (!db_num_rows($result)){
 ?>
 	<tr>
-		<td colspan="5" style="text-align: center;"><i>No items looted</i></td>
+		<td colspan="6" style="text-align: center;"><i>No items looted</i></td>
 	</tr>
 <?
 	}
