@@ -391,7 +391,12 @@
 
 	function get_raid_id($raids, $time){
 		foreach ($raids as $raid){
-			if ($raid[start] <= $time && $raid[end] >= $time) return $raid[id];
+			if ($raid[start] <= $time && $raid[end] >= $time){
+				#echo "$time IS between $raid[start] & $raid[end] ($raid[id])<br />";
+				return $raid[id];
+			}else{
+				#echo "$time is not between $raid[start] & $raid[end]<br />";
+			}
 		}
 		return 0;
 	}

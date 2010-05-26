@@ -57,6 +57,7 @@
 		foreach ($data[bosses] as $row){
 
 			$row[raid_id] = get_raid_id($raids, $row[when]);
+
 			$key = "$row[raid_id]_$row[name]";
 
 			if (!isset($bosses[$key])){
@@ -580,9 +581,11 @@
 		foreach ($raids as $k => $raid){
 
 			$matched = 0;
+			$raid[center] = $raid[start]+(($raid[end]-$raid[start])/2);
 
 			foreach ($db_raids as $row){
-				if ($row[zone] == $raid[zone] && $row[difficulty] == $raid[diff]){
+
+				if ($row[zone] == $raid[zone] && $row[difficulty] == $raid[diff] && $raid[center] > $row[date_start] && $raid[center] < $row[date_end]){
 
 					db_update('raids', array(
 						'date_start'	=> intval($raid[start]),
