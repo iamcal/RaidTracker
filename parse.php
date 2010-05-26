@@ -1,27 +1,24 @@
 <?
 	include('init.php');
+	include('lib_parse.php');
 
 
-	$id = intval($_GET[id]);
-	$ret = parse_report($id, 1);
+	#
+	# get day
+	#
 
-
-	if ($ret[status] == 'not_hc'){
-
-		include('head.txt');
-?>
-	<h1>Error - Bad XML</h1>
-	<p>It looks like that XML wasn't in the usual HeadCount format. <a href="import.php">Try again</a>.</p>
-<?
-		include('foot.txt');
-		exit;
+	$day = $_GET[d];
+	if (!preg_match('!^\d\d\d\d-\d\d-\d\d$!', $day)){
+		die('bad day: '.$day);
 	}
+
+	parse_day($day);
 
 
 	#
 	# done!
 	#
 
-	header("location: date.php?d=$ret[day]");
+	header("location: date.php?d=$day");
 	exit;
 ?>

@@ -31,7 +31,7 @@
 				exit;
 			}
 
-			header("location: parse.php?id=$id");
+			header("location: parse.php?d=$day");
 			exit;
 		}
 	}
