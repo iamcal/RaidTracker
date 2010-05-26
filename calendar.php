@@ -44,8 +44,6 @@
 			<a href="raid.php?id=<?=$info[id]?>"><?=format_zone($info[zone], $info[difficulty])?></a><br />
 <?
 		}
-	}else{
-		echo "-";
 	}
 ?>
 		</td>
