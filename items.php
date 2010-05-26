@@ -7,7 +7,7 @@
 	include('head.txt');
 ?>
 
-<table border="1">
+<table width="100%">
 	<tr>
 		<th>&nbsp;</th>
 		<th>Item</th>

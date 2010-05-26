@@ -47,14 +47,14 @@ table.calendar td {
 }
 
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+	border: 1px solid transparent;
+	border-spacing: 2px;
+	nackground-color: pink
 }
 
 table td, table th {
 	padding: 4px;
-	border: 2px solid #484848;
-	background-color: #000;
+	background-color: #222;
 	color: #ccc;
 	vertical-align: top;
 }
@@ -69,7 +69,7 @@ span.atnd20 { font-weight: bold; color: orange; }
 span.atnd0  { font-weight: bold; color: red; }
 
 div#navi {
-	background-color: #000000;
+	background-color: #222;
 	padding: 4px;
 	margin-bottom: 1em;
 }

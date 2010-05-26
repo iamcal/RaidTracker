@@ -18,7 +18,7 @@
 
 <h2>Drops</h2>
 
-<table border="1">
+<table>
 	<tr>
 		<th>Looted to</th>
 		<th>Dropped by</th>

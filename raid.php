@@ -22,7 +22,7 @@
 
 <h2>Boss Kills</h2>
 
-<table border="1">
+<table>
 	<tr>
 		<th>Boss</th>
 		<th>Time</th>
@@ -68,7 +68,7 @@ function lootItem(id,state){
 
 </script>
 
-<table border="1">
+<table>
 	<tr>
 		<th>&nbsp;</th>
 		<th>Item</th>
@@ -125,7 +125,7 @@ function lootItem(id,state){
 
 <h2>Attendance</h2>
 
-<table border="1">
+<table>
 	<tr>
 		<th>Player</th>
 		<th>In Raid</th>

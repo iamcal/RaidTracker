@@ -10,7 +10,7 @@
 
 <h2>Guild Roster</h2>
 
-<table border="1">
+<table>
 	<tr>
 		<th>&nbsp;</th>
 		<th>Player</th>
@@ -50,7 +50,7 @@
 
 <h2>Others</h2>
 
-<table border="1">
+<table>
 	<tr>
 		<th>&nbsp;</th>
 		<th>Player</th>

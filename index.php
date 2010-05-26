@@ -9,7 +9,7 @@
 
 <h2>Recent Raids</h2>
 
-<table>
+<table width="100%">
 	<tr>
 		<th>Raid</th>
 		<th>Duration</th>
@@ -46,7 +46,7 @@
 
 <h2>Recent Loots</h2>
 
-<table border="1">
+<table>
 	<tr>
 		<th>&nbsp;</th>
 		<th>Item</th>

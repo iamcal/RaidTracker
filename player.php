@@ -145,7 +145,7 @@
 
 ?>
 
-<table>
+<table width="100%">
 	<tr>
 		<th>Day</th>
 		<th>Last Week</th>
@@ -179,7 +179,7 @@
 
 <h2>Loots</h2>
 
-<table>
+<table width="100%">
 	<tr>
 		<th>&nbsp;</th>
 		<th>Item</th>
@@ -211,7 +211,7 @@
 
 <h2>Raids</h2>
 
-<table border="1">
+<table>
 	<tr>
 		<th>Raid</th>
 		<th>In Raid</th>
@@ -235,7 +235,7 @@
 
 <h2>Calendar</h2>
 
-<table border="1" class="calendar" width="100%">
+<table class="calendar" width="100%">
 	<tr>
 		<th width="12%">Tue</th>
 		<th width="12%">Wed</th>

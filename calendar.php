@@ -21,7 +21,7 @@
 	#dumper($all_raids);
 	#dumper($weeks);
 ?>
-<table border="1" class="calendar" width="100%">
+<table class="calendar" width="100%">
 	<tr>
 		<th width="14%">Tue</th>
 		<th width="14%">Wed</th>
