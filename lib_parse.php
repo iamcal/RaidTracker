@@ -200,7 +200,16 @@
 				'icon'	=> AddSlashes($row[icon]),
 			);
 
-			db_insert_on_dupe('items', $hash, $hash);
+			$hash2 = $hash;
+
+			if ($hash2[name] == 'Item unavailable'){
+				unset($hash2[name]);
+				unset($hash2[qual]);
+				unset($hash2[level]);
+				unset($hash2[icon]);
+			}
+
+			db_insert_on_dupe('items', $hash, $hash2);
 		}
 
 	}
