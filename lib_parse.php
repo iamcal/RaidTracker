@@ -41,8 +41,6 @@
 		parse_players($day, $raids, $data);
 	}
 
-
-
 	########################################################################################
 
 	function parse_bosses($day, $raids, $data){
@@ -694,7 +692,7 @@
 		foreach ($xml->players->player as $player){
 
 			$row = array(
-				'name'	=> (string) $player->name,
+				'name'	=> utf8_cleanup((string) $player->name),
 				'class'	=> (string) $player->class,
 				'guild'	=> (string) $player->guild,
 				'race'	=> (string) $player->race,
@@ -902,4 +900,29 @@
 	########################################################################################
 	########################################################################################
 
+	function utf8_cleanup($name){
+
+		$conv = utf8_decode($name);
+
+		#if (preg_match('!cade!',$name)){
+		#	echo "$name / $conv<br />";
+		#}
+
+		if (is_valid_utf8($conv)){
+			#echo "OUT: $conv<br />";
+			return $conv;
+		}else{
+			#echo "OUT: $name<br />";
+			return $name;
+		}
+	}
+
+	function is_valid_utf8($bytes){
+
+		$test = iconv('UTF-8', 'UTF-8//IGNORE', $bytes);
+
+		return ($test == $bytes) ? 1 : 0;
+	}
+
+	########################################################################################
 ?>
