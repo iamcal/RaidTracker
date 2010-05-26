@@ -34,7 +34,7 @@
 
 	$result = db_query("SELECT * FROM attendance WHERE player_name='$name_enc' ORDER BY raid_day ASC");
 	while ($row = db_fetch_hash($result)){
-		$row[raid] = db_fetch_hash(db_query("SELECT * FROM raids WHERE id=$row[raid_id]"));
+		$row[raid] = load_raid($row[raid_id]);
 		$row[duration] = $row[raid][date_end] - $row[raid][date_start];
 		$percent = min(100, round(100 * ($row[time_raid]+$row[time_wait]+60) / $row[duration]));
 
@@ -52,6 +52,9 @@
 
 	$result = db_query("SELECT * FROM loots WHERE player_name='$name_enc' AND ded=0 ORDER BY date_drop ASC");
 	while ($row = db_fetch_hash($result)){
+
+		$row[raid] = load_raid($row[raid_id]);
+		$row[item] = load_item($row[item_id]);
 
 		$loots[] = $row;
 		$loots_by_raid[$row[raid_id]]++;
@@ -187,10 +190,10 @@
 	foreach ($loots as $row){
 ?>
 	<tr>
-		<td style="padding: 2px;"><a href="item.php?id=<?=$row[item_id]?>" rel="item=<?=$row[item_id]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/<?=$row[item_icon]?>.jpg" width="24" height="24" /></a></td>
-		<td><a href="item.php?id=<?=$row[item_id]?>" rel="item=<?=$row[item_id]?>"><?=$row[item_name]?></a></td>
+		<td style="padding: 2px;"><a href="item.php?id=<?=$row[item][id]?>" rel="item=<?=$row[item][id]?>"><?=insert_icon($row[item][icon])?></a></td>
+		<td><a href="item.php?id=<?=$row[item][id]?>" rel="item=<?=$row[item][id]?>" class="q q<?=$row[item][qual]?>"><?=$row[item][name]?></a></td>
 		<td><?=$row[source]?></td>
-		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid_day]?> - <?=format_zone($row[raid_zone], $row[raid_difficulty])?></a></td>
+		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid][day]?> - <?=format_zone($row[raid][zone], $row[raid][difficulty])?></a></td>
 	</tr>
 <?
 	}
