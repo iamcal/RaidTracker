@@ -1,5 +1,5 @@
 <?
-	putenv("TZ=PST8PDT");
+	putenv("TZ=Etc/GMT+8");
 
 	include('db.php');
 
