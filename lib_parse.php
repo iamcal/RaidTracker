@@ -182,8 +182,272 @@
 		# de-dupe / merge player events
 		#
 
-		# TODO.....
+		foreach ($players as $pk => $player){
+
+			#
+			# find all events
+			#
+
+			$events = array(
+				'raid' => array(),
+				'list' => array(),
+				'offl' => array(),
+			);
+
+			foreach ($player[events] as $event){
+
+				$key = 'raid';
+				if ($event[note] == 'Wait list') $key = 'wait';
+				if ($event[note] == 'Offline') $key = 'offl';
+
+				$events[$key][] = array($event[start], $event[end]);
+			}
+
+			#$events['raid'][] = array(1,10);
+			#$events['raid'][] = array(9,12);
+			#$events['raid'][] = array(15,17);
+			#$events['list'][] = array(11,16);
+			#$events['offl'][] = array(0,20);
+
+
+			#
+			# merge all events of each type
+			#
+
+			$events['raid'] = merge_events($events['raid']);
+			$events['list'] = merge_events($events['list']);
+			$events['offl'] = merge_events($events['offl']);
+
+
+			#
+			# subtract more important events
+			#
+
+			$events['list'] = remove_events($events['list'], $events['raid']);
+			$events['offl'] = remove_events($events['offl'], $events['raid']);
+			$events['offl'] = remove_events($events['offl'], $events['list']);
+
+
+			#
+			# we should now have a single list
+			#
+
+			$new = array();
+			foreach ($events as $k => $rows){
+				foreach ($rows as $row){
+					$new[] = array($k, $row[0], $row[1]);
+				}
+			}
+
+			$players[$pk][events] = $new;
+		}
+
+
+		#
+		# create attendance records
+		#
+
+		foreach ($players as $pk => $player){
+
+			$players[$pk][attendance] = array();
+
+			foreach ($raids as $raid){
+
+				#
+				# get times for this player in this raid...
+				#
+
+				$times = array(
+					'raid' => 0,
+					'wait' => 0,
+					'offl' => 0,
+				);
+				$matched = 0;
+
+				foreach ($player[events] as $event){
+
+					$key		= $event[0];
+					$e_start	= $event[1];
+					$e_end		= $event[2];
+
+					if ($e_start > $raid[end] || $e_end < $raid[start]){
+
+						# no overlap at all
+					}else{
+
+						$a_start = max($e_start, $raid[start]);
+						$a_end = min($e_end, $raid[end]);
+
+						$dif = ($a_end - $a_start);
+
+						if ($dif){
+							$times[$key] += $dif;
+							$matched = 1;
+						}
+					}
+
+				}
+
+				if ($matched){
+
+					$players[$pk][attendance][$raid[id]] = $times;
+				}
+			}
+		}
+
+
+		#
+		# fetch DB rows
+		#
+
+		$db_attendance = array();
+
+		$result = db_query("SELECT * FROM attendance WHERE raid_day='$day'");
+		while ($row = db_fetch_hash($result)){
+
+			$db_attendance[$row[id]] = $row;
+		}
+
+
+		#
+		# for each attendance, try and match it against a db row
+		#
+
+		foreach ($players as $pk => $player){
+		foreach ($player[attendance] as $raid_id => $attendance){
+
+			$matched = 0;
+
+			foreach ($db_attendance as $row){
+				if ($row[player_name] == $player[name] && $row[raid_id] == $raid_id){
+
+					# found - update
+
+					db_update('attendance', array(
+						'time_raid'	=> intval($attendance['raid']),
+						'time_wait'	=> intval($attendance['wait']),
+						'time_offline'	=> intval($attendance['offl']),
+					), "id=$row[id]");
+
+					$players[$pk][attendance][$raid_id][id] = $row[id];
+					$matched = 1;
+					unset($db_attendance[$row[id]]);
+					break;
+				}
+			}
+
+			if (!$matched){
+
+				$players[$pk][attendance][$raid_id][id] = db_insert('attendance', array(
+
+					'player_name'	=> AddSlashes($player[name]),
+					'raid_id'	=> intval($raid_id),
+					'raid_day'	=> $day,
+
+					'time_raid'	=> intval($attendance['raid']),
+					'time_wait'	=> intval($attendance['wait']),
+					'time_offline'	=> intval($attendance['offl']),
+				));
+
+				$players[$pk][attendance][$raid_id][INSERTED] = 1;
+			}
+		}
+		}
+
+
+		#
+		# deal with un-matched DB attendance
+		#
+
+		foreach ($db_attendance as $row){
+
+			#echo "nuking attendance row $row[id]<br />";
+			db_query("DELETE FROM attendance WHERE id=$row[id]");
+		}
+
 		#dumper($players);
+	}
+
+	########################################################################################
+
+	#
+	# modify $events to make sure that no events in $remove are
+	# intersecting with them.
+	#
+
+	function remove_events($events, $remove){
+
+		foreach ($remove as $row){
+
+			$new = array();
+			foreach ($events as $event){
+
+				if ($event[0] > $row[1] || $event[1] < $row[0]){
+
+					# no overlap at all
+					$new[] = $event;
+				}else{
+
+					# does any of $event occur before $row?
+					if ($event[0] < $row[0]){
+						$new[] = array($event[0], $row[0]);
+					}
+
+					# does any of $event occur after $row?
+					if ($event[1] > $row[1]){
+						$new[] = array($row[1], $event[1]);
+					}
+
+				}
+			}
+
+			$events = $new;
+		}
+
+		return $events;
+	}
+
+	########################################################################################
+
+	#
+	# take the list of events ([start, end] pairs) and merge them so
+	# that none overlap.
+	#
+
+	function merge_events($events){
+
+		$out = array();
+
+		foreach ($events as $event){
+
+			#
+			# check for intersection
+			#
+
+			$matched = 0;
+
+			foreach ($out as $k => $row){
+
+				if ($event[0] > $row[1] || $event[1] < $row[0]){
+
+					# no overlap at all
+				}else{
+
+					$start	= min($event[0], $row[0]);
+					$end	= max($event[1], $row[1]);
+
+					$out[$k] = array($start, $end);
+					$matched = 1;
+					break;
+				}
+			}
+
+			if (!$matched){
+				$out[] = $event;
+			}
+		}
+
+		return $out;
 	}
 
 	########################################################################################
