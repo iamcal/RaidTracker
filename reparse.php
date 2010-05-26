@@ -1,17 +1,14 @@
 <?
 	include('init.php');
-
-	db_query("DELETE FROM attendance");
-	db_query("DELETE FROM bosses");
-	db_query("DELETE FROM loots");
-	db_query("DELETE FROM players");
-	db_query("DELETE FROM raids");
+	include('lib_parse.php');
 
 
-	$result = db_query("SELECT id FROM reports");
+	$result = db_query("SELECT raid_day FROM reports GROUP BY raid_day");
 	while ($row = db_fetch_hash($result)){
 
-		$ret = parse_report($row[id], 0);
+		echo "$row[raid_day]..."; flush();
+		parse_day($row[raid_day]);
+		echo "ok<br />\n"; flush();
 	}
 
 	echo "all done";
