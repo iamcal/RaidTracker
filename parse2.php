@@ -20,6 +20,7 @@
 		'events'	=> array(),
 		'items'		=> array(),
 		'loots'		=> array(),
+		'bosses'	=> array(),
 		'players'	=> array(),
 	);
 
@@ -42,8 +43,94 @@
 
 	parse_loots($day, $raids, $data);
 
+	parse_bosses($day, $raids, $data);
+
 	parse_players($day, $raids, $data);
 
+
+
+	########################################################################################
+
+	function parse_bosses($day, $raids, $data){
+
+		$bosses = array();
+
+
+		#
+		# de-dupe boss rows
+		#
+
+		foreach ($data[bosses] as $row){
+
+			$row[raid_id] = get_raid_id($raids, $row[when]);
+			$key = "$row[raid_id]_$row[name]";
+
+			if (!isset($bosses[$key])){
+				$bosses[$key] = $row;
+			}
+		}
+
+
+		#
+		# fetch DB rows
+		#
+
+		$db_bosses = array();
+
+		$result = db_query("SELECT * FROM bosses WHERE raid_day='$day'");
+		while ($row = db_fetch_hash($result)){
+
+			$db_bosses[$row[id]] = $row;
+		}
+
+
+		#
+		# for each boss, try and match it against a db row
+		#
+
+		foreach ($bosses as $k => $boss){
+
+			$matched = 0;
+
+			foreach ($db_bosses as $row){
+
+				if ($row[raid_id] == $boss[raid_id] && $row[name] == $boss[name]){
+
+					db_update('bosses', array(
+						'date_kill'	=> intval($boss[when]),
+					), "id=$row[id]");
+
+					$bosses[$k][id] = $row[id];
+					$matched = 1;
+					unset($db_bosses[$row[id]]);
+					break;
+				}
+			}
+
+			if (!$matched){
+
+				$bosses[$k][id] = db_insert('bosses', array(
+					'raid_id'	=> intval($boss[raid_id]),
+					'raid_day'	=> $day,
+					'name'		=> AddSlashes($boss[name]),
+					'date_kill'	=> intval($boss[when]),
+				));
+
+				$bosses[$k][INSERTED] = 1;
+			}
+		}
+
+
+		#
+		# deal with un-matched DB bosses
+		#
+
+		foreach ($db_bosses as $row){
+
+			db_query("DELETE FROM bosses WHERE id=$row[id]");
+		}
+
+	}
 
 	########################################################################################
 
@@ -127,9 +214,6 @@
 
 	function parse_loots($day, $raids, $data){
 
-		#
-		# loots
-		#
 
 		$loots = array();
 
@@ -348,6 +432,23 @@
 			}
 
 			$data[players][] = $row;
+		}
+
+
+		#
+		# bosses
+		#
+
+		foreach ($xml->bossKills->boss as $boss){
+
+			$row = array(
+				'name'	=> (string) $boss->name,
+				'zone'	=> (string) $boss->zone,
+				'diff'	=> (string) $boss->difficulty,
+				'when'	=> strtotime((string) $boss->time),
+			);
+
+			$data[bosses][] = $row;
 		}
 	}
 
