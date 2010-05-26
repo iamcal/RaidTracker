@@ -29,13 +29,13 @@
 	$result = db_query("SELECT * FROM loots WHERE item_id=$item[item_id] ORDER BY date_drop ASC");
 	while ($row = db_fetch_hash($result)){
 
-		$name_enc = AddSlashes($row[player_name]);
-		$player = db_fetch_hash(db_query("SELECT * FROM players WHERE name='$name_enc'"));
-		$row[class_id] = StrToLower(str_replace(' ', '', $player['class']));
+		$raid = load_raid($row[raid_id]);
+		$player = load_player($row[player_name]);
+
 ?>
 	<tr>
 <? if ($row[ded] == 0){ ?>
-		<td><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[player_name]?></a></td>
+		<td><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$player[class_id]?> class-link"><?=$row[player_name]?></a></td>
 <? }else if ($row[ded] == 1){ ?>
 		<td>DE'd</td>
 <? }else if ($row[ded] == 2){ ?>
@@ -44,7 +44,7 @@
 		<td>ERROR</td>
 <? } ?>
 		<td><?=$row[source]?></td>
-		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid_day]?> - <?=format_zone($row[raid_zone], $row[raid_difficulty])?></a></td>
+		<td><a href="raid.php?id=<?=$row[raid_id]?>"><?=$row[raid_day]?> - <?=format_zone($raid[zone], $raid[difficulty])?></a></td>
 		<td><?=format_time($row[date_drop])?></td>
 	</tr>
 <?
