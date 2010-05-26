@@ -13,17 +13,19 @@ body {
 	text-align: center;
 	margin: 0;
 	padding: 0;
-	background-color: #f5f5f5;
-	color: #333;
+	background-color: #000000;
+	color: #ccc;
 }
+
+a { color: #FFD100; }
 
 #main {
 	width: 740px;
 	margin: 10px auto;
 	text-align: left;
 	padding: 1em;
-	border: 1px solid #999;
-	background-color: #fff;
+	border: 1px solid #484848;
+	background-color: #383838;
 	font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -44,6 +46,19 @@ table.calendar td {
 	line-height: 20px;
 }
 
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+table td, table th {
+	padding: 4px;
+	border: 2px solid #484848;
+	background-color: #000;
+	color: #ccc;
+	vertical-align:text-top;
+}
+
 table.calendar td small {
 	font-size: 10px;
 }
@@ -54,13 +69,24 @@ span.atnd20 { font-weight: bold; color: orange; }
 span.atnd0  { font-weight: bold; color: red; }
 
 div#navi {
-	background-color: #f5f5f5;
+	background-color: #000000;
 	padding: 4px;
 	margin-bottom: 1em;
 }
 div#navi a { text-decoration: none; }
 div#navi a:hover { text-decoration: underline; }
 
+a.class-link		{font-weight: bold; text-decoration: none; }
+a.class-warrior		{color:#C69B6D!important;}
+a.class-paladin		{color:#F48CBA!important;}
+a.class-hunter		{color:#AAD372!important;}
+a.class-rogue		{color:#FFF468!important;}
+a.class-priest		{color:#FFFFFF!important;}
+a.class-deathknight	{color:#C41E3B!important;}
+a.class-shaman		{color:#2359FF!important;}
+a.class-mage		{color:#68CCEF!important;}
+a.class-warlock		{color:#9382C9!important;}
+a.class-druid		{color:#FF7C0A!important;}
 
 </style>
 <script>
@@ -113,7 +139,7 @@ function ajaxify(url, args, handler){
 
 <div id="main">
 
-	<h1><?=$page_title?$page_title:'Eternal Raid Tracker'?></h1>
+	<h1<? if ($title_icon){ ?> style="padding-left: 44px; background-image: url(<?=$title_icon?>); background-repeat: no-repeat;"<? } ?>><?=$page_title?$page_title:'Eternal Raid Tracker'?></h1>
 
 	<div id="navi">
 <?
