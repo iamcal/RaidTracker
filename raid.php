@@ -25,7 +25,6 @@
 <table border="1">
 	<tr>
 		<th>Boss</th>
-		<th>Raid</th>
 		<th>Time</th>
 	</tr>
 <?
@@ -34,7 +33,6 @@
 ?>
 	<tr>
 		<td><?=$row[name]?></td>
-		<td><?=format_zone($row[zone], $row[difficulty])?></td>
 		<td><?=format_time($row[date_kill])?></td>
 	</tr>
 <?
