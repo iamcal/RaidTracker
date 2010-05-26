@@ -52,17 +52,16 @@
 <?
 	$result = db_query("SELECT * FROM loots ORDER BY date_drop DESC LIMIT 10");
 	while ($row = db_fetch_hash($result)){
-		$raid = db_fetch_hash(db_query("SELECT * FROM raids WHERE id=$row[raid_id]"));
 
-		$name_enc = AddSlashes($row[player_name]);
-		$player = db_fetch_hash(db_query("SELECT * FROM players WHERE name='$name_enc'"));
-		$row[class_id] = StrToLower(str_replace(' ', '', $player['class']));
+		$item	= load_item($row[item_id]);
+		$raid	= load_raid($row[raid_id]);
+		$player	= load_player($row[player_name]);
 ?>
 	<tr>
-		<td><a href="http://www.wowhead.com/item=<?=$row[item_id]?>"><img src="http://static.wowhead.com/images/wow/icons/small/<?=$row[item_icon]?>.jpg" width="18" height="18" /></a></td>
-		<td><a href="item.php?id=<?=$row[item_id]?>"><?=$row[item_name]?></a></td>
+		<td><a href="http://www.wowhead.com/item=<?=$item[id]?>"><img src="http://static.wowhead.com/images/wow/icons/small/<?=$item[icon]?>.jpg" width="18" height="18" /></a></td>
+		<td><a href="item.php?id=<?=$item[id]?>"><?=$item[name]?></a></td>
 <? if ($row[ded] == 0){ ?>
-		<td><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[player_name]?></a></td>
+		<td><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$player[class_id]?> class-link"><?=$row[player_name]?></a></td>
 <? }else if ($row[ded] == 1){ ?>
 		<td>DE'd</td>
 <? }else if ($row[ded] == 2){ ?>

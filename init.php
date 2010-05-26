@@ -430,4 +430,39 @@
 		db_query("UPDATE reports SET raid_day='$day' WHERE id=$id");
 	}
 
+
+	$GLOBALS[_cache] = array(
+		'players'	=> array(),
+		'items'		=> array(),
+		'raids'		=> array(),
+	);
+
+	function load_player($name){
+		if (!$GLOBALS[_cache][players][$name]){
+			$name_enc = AddSlashes($name);
+
+			$row = db_fetch_hash(db_query("SELECT * FROM players WHERE name='$name_enc'"));
+			$row[class_id] = StrToLower(str_replace(' ', '', $row['class']));
+
+			$GLOBALS[_cache][players][$name] = $row;
+		}
+		return $GLOBALS[_cache][players][$name];
+	}
+
+	function load_item($id){
+		if (!$GLOBALS[_cache][items][$id]){
+			$id_enc = intval($id);
+			$GLOBALS[_cache][items][$id] = db_fetch_hash(db_query("SELECT * FROM items WHERE id='$id_enc'"));
+		}
+		return $GLOBALS[_cache][items][$id];
+	}
+
+	function load_raid($id){
+		if (!$GLOBALS[_cache][raids][$id]){
+			$id_enc = intval($id);
+			$GLOBALS[_cache][raids][$id] = db_fetch_hash(db_query("SELECT * FROM raids WHERE id='$id_enc'"));
+		}
+		return $GLOBALS[_cache][raids][$id];
+	}
+
 ?>

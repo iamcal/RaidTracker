@@ -17,28 +17,28 @@
 <?
 	$items = array();
 
-	$result = db_query("SELECT * FROM loots ORDER BY item_name ASC");
+	$result = db_query("SELECT * FROM items ORDER BY name ASC");
 	while ($row = db_fetch_hash($result)){
 
-		if (isset($items[$row[item_id]])){
+		$row[count] = 0;
+		$row[sources] = array();
 
-			$items[$row[item_id]][count]++;
-			$items[$row[item_id]][sources][$row[source]] = 1;
-
-		}else{
-			$row[count] = 1;
-			$row[sources] = array($row[source] => 1);
-
-			$items[$row[item_id]] = $row;
-		}
+		$items[$row[id]] = $row;
 	}
+
+	$result = db_query("SELECT * FROM loots");
+	while ($row = db_fetch_hash($result)){
+
+		$items[$row[item_id]][count]++;
+		$items[$row[item_id]][sources][$row[source]] = 1;
+	}	
 
 
 	foreach ($items as $row){
 ?>
 	<tr>
-		<td style="padding: 2px;"><a href="item.php?id=<?=$row[item_id]?>" rel="item=<?=$row[item_id]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/<?=$row[item_icon]?>.jpg" width="24" height="24" /></a></td>
-		<td><a href="item.php?id=<?=$row[item_id]?>" rel="item=<?=$row[item_id]?>"><?=$row[item_name]?></a></td>
+		<td style="padding: 2px;"><a href="item.php?id=<?=$row[id]?>" rel="item=<?=$row[id]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/<?=$row[icon]?>.jpg" width="24" height="24" /></a></td>
+		<td><a href="item.php?id=<?=$row[id]?>" rel="item=<?=$row[id]?>"><?=$row[name]?></a></td>
 		<td style="text-align: center"><?=$row['count']?></td>
 		<td>
 <? foreach (array_keys($row[sources]) as $source){ ?>
