@@ -13,6 +13,8 @@
 				'data'		=> AddSlashes($data),
 			));
 
+			$day = parse_raid_date($id, $data);
+
 			header("location: parse.php?id=$id");
 			exit;
 		}
