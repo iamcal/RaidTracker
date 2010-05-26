@@ -2,16 +2,16 @@
 	include('init.php');
 
 	$id = intval($_GET[id]);
-	$item = db_fetch_hash(db_query("SELECT * FROM loots WHERE item_id='$id' ORDER BY date_drop ASC LIMIT 1"));
+	$item = load_item($id);
 
-	$page_title = "Item : $item[item_name]";
-	$title_icon = "http://static.wowhead.com/images/wow/icons/medium/{$item[item_icon]}.jpg";
+	$page_title = "Item : $item[name]";
+	$title_icon = "http://static.wowhead.com/images/wow/icons/medium/{$item[icon]}.jpg";
 
 	include('head.txt');
 ?>
 
 <p>
-	(<a href="http://www.wowarmory.com/item-info.xml?i=<?=$item[item_id]?>">armory</a>, <a href="http://www.wowhead.com/item=<?=$item[item_id]?>">wowhead</a>)
+	(<a href="http://www.wowarmory.com/item-info.xml?i=<?=$item[id]?>">armory</a>, <a href="http://www.wowhead.com/item=<?=$item[id]?>">wowhead</a>)
 		
 </p>
 
@@ -26,7 +26,7 @@
 		<th>Time</th>
 	</tr>
 <?
-	$result = db_query("SELECT * FROM loots WHERE item_id=$item[item_id] ORDER BY date_drop ASC");
+	$result = db_query("SELECT * FROM loots WHERE item_id=$item[id] ORDER BY date_drop ASC");
 	while ($row = db_fetch_hash($result)){
 
 		$raid = load_raid($row[raid_id]);
