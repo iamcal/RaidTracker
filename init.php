@@ -396,4 +396,38 @@
 		return 0;
 	}
 
+
+	function parse_raid_date($id, $data){
+
+		$id = intval($id);
+
+		$row = db_fetch_hash(db_query("SELECT * FROM reports WHERE id=$id"));
+
+		$xml = new SimpleXMLElement($row[data]);
+
+
+		#
+		# get raid day
+		#
+
+		$start	= strtotime((string) $xml->start);
+
+		list($y,$m,$d,$h) = explode('-', date('Y-m-d-H', $start));
+
+		# which day is this raid from?
+		# raids that start before 6am count for the day before!
+		$day = date('Y-m-d', $start);
+		if ($h < 6){
+			$ts = mktime(0,0,0,$m,$d-1,$y);
+			$day = date('Y-m-d', $ts);
+		}
+
+
+		#
+		# save it
+		#
+
+		db_query("UPDATE reports SET raid_day='$day' WHERE id=$id");
+	}
+
 ?>
