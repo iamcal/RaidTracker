@@ -20,6 +20,12 @@
 				include('head.txt');
 ?>
 	<p>It looks like that XML wasn't in the usual HeadCount format. <a href="import.php">Try again</a>.</p>
+
+	<p>	To get the correct format:
+		Right click the headcount button around the minimap and go into Exporting-&gt;Export Format and choose XML.
+		After that, go back to the raid and hit Export, CTRL-C and then CTRL-V it into the import form.
+	</p>
+
 <?
 				include('foot.txt');
 				exit;
