@@ -16,7 +16,7 @@
 <p>
 	<b>
 		Level <?=$player[level]?> <?=$player[race]?> <?=$player['class']?>,
-		&lt;<?=$player[guild]?>&gt;
+		&lt;<?=strlen($player[guild])?$player[guild]:'...'?>&gt;
 	</b>
 	(<a href="http://www.wowarmory.com/character-sheet.xml?r=Hyjal&n=<?=$player[name]?>">armory</a>, <a href="http://www.wowhead.com/profile=us.hyjal.<?=StrToLower($player[name])?>">wowhead</a>)
 		
