@@ -20,6 +20,7 @@
 		'events'	=> array(),
 		'items'		=> array(),
 		'loots'		=> array(),
+		'players'	=> array(),
 	);
 
 	$result = db_query("SELECT * FROM reports WHERE raid_day='$day'");
@@ -41,6 +42,67 @@
 
 	parse_loots($day, $raids, $data);
 
+	parse_players($day, $raids, $data);
+
+
+	########################################################################################
+
+	function parse_players($day, $raids, $data){
+
+		#
+		# de-dupe / merge rows
+		#
+
+		$players = array();
+		$copy_fields = array('class', 'guild', 'race', 'sex', 'level');
+
+		foreach ($data[players] as $row){
+
+			if (isset($players[$row[name]])){
+
+				foreach ($copy_fields as $f){
+					if (strlen($row[$f])){ $players[$row[name]][$f] = $row[$f]; }
+				}
+
+				foreach ($row[events] as $event){
+					$players[$row[name]][events][] = $event;
+				}
+			}else{
+
+				$players[$row[name]] = $row;
+			}
+		}
+
+
+		#
+		# create / update player rows
+		#
+
+		foreach ($players as $row){
+
+			$hash = array(
+				'name'	=> AddSlashes($row[name]),
+				'class'	=> AddSlashes($row['class']),
+				'guild'	=> AddSlashes($row[guild]),
+				'race'	=> AddSlashes($row[race]),
+				'sex'	=> AddSlashes($row[sex]),
+				'level'	=> intval($row[level]),
+			);
+
+			$hash2 = $hash;
+			foreach ($hash2 as $k => $v){ if (!strlen($v)){ unset($hash2[$k]); } }
+
+			db_insert_on_dupe('players', $hash, $hash2);
+		}
+
+
+		#
+		# de-dupe / merge player events
+		#
+
+
+		dumper($players);
+	}
 
 	########################################################################################
 
@@ -257,6 +319,35 @@
 				'src'	=> (string) $item->source,
 				'when'	=> strtotime((string) $item->time),
 			);
+		}
+
+
+		#
+		# players
+		#
+
+		foreach ($xml->players->player as $player){
+
+			$row = array(
+				'name'	=> (string) $player->name,
+				'class'	=> (string) $player->class,
+				'guild'	=> (string) $player->guild,
+				'race'	=> (string) $player->race,
+				'sex'	=> (string) $player->sex,
+				'level'	=> (string) $player->level,
+			);
+
+			$row[events] = array();
+
+			foreach ($player->attendance->event as $event){
+				$row[events][] = array(
+					'note'	=> (string) $event->note,
+					'start'	=> strtotime((string) $event->start),
+					'end'	=> strtotime((string) $event->end),
+				);
+			}
+
+			$data[players][] = $row;
 		}
 	}
 
