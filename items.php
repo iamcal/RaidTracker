@@ -37,8 +37,8 @@
 	foreach ($items as $row){
 ?>
 	<tr>
-		<td style="padding: 2px;"><a href="item.php?id=<?=$row[id]?>" rel="item=<?=$row[id]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/<?=$row[icon]?>.jpg" width="24" height="24" /></a></td>
-		<td><a href="item.php?id=<?=$row[id]?>" rel="item=<?=$row[id]?>"><?=$row[name]?></a></td>
+		<td style="padding: 2px;"><a href="item.php?id=<?=$row[id]?>" rel="item=<?=$row[id]?>"><?=insert_icon($row[icon])?></a></td>
+		<td><a href="item.php?id=<?=$row[id]?>" rel="item=<?=$row[id]?>" class="q q<?=$row[qual]?>"><?=$row[name]?></a></td>
 		<td style="text-align: center"><?=$row['count']?></td>
 		<td>
 <? foreach (array_keys($row[sources]) as $source){ ?>

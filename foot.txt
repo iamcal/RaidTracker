@@ -1,6 +1,12 @@
 </div>
 <div id="footer">
 	Built by Bees
+<?
+	if ($_GET[debugsql]){
+		echo "<br />";
+		echo "DB QUERIES: {$GLOBALS[db][queries]}<br />\n";
+	}
+?>
 </div>
 
 <script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>

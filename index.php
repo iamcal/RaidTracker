@@ -58,8 +58,8 @@
 		$player	= load_player($row[player_name]);
 ?>
 	<tr>
-		<td><a href="http://www.wowhead.com/item=<?=$item[id]?>"><img src="http://static.wowhead.com/images/wow/icons/small/<?=$item[icon]?>.jpg" width="18" height="18" /></a></td>
-		<td><a href="item.php?id=<?=$item[id]?>"><?=$item[name]?></a></td>
+		<td style="padding: 2px;"><a href="item.php?id=<?=$item[id]?>" rel="item=<?=$item[id]?>"><?=insert_icon($item[icon])?></a></td>
+		<td><a href="item.php?id=<?=$item[id]?>" rel="item=<?=$item[id]?>" class="q q<?=$item[qual]?>"><?=$item[name]?></a></td>
 <? if ($row[ded] == 0){ ?>
 		<td><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$player[class_id]?> class-link"><?=$row[player_name]?></a></td>
 <? }else if ($row[ded] == 1){ ?>

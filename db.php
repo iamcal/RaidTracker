@@ -4,6 +4,8 @@
 	$GLOBALS[cfg][db_user]	= 'www-rw';
 	$GLOBALS[cfg][db_pass]	= 'pass';
 
+	$GLOBALS[db][queries] = 0;
+
 	db_connect();
 
 	#################################################################
@@ -23,8 +25,9 @@
 
 	function db_query($qstring) {
 
-		if ($GLOBALS[HTTP_GET_VARS][debugsql] || $_GET[debugsql]){
+		if ($_GET[debugsql]){
 			echo "QUERY: ".HtmlSpecialChars($qstring)."<br />\n";
+			$GLOBALS[db][queries]++;
 		}
 
 		$result = mysql_query($qstring, $GLOBALS[cfg][db_conn]);

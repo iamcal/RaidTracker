@@ -465,4 +465,8 @@
 		return $GLOBALS[_cache][raids][$id];
 	}
 
+	function insert_icon($icon){
+
+		return "<img src=\"http://static.wowhead.com/images/wow/icons/medium/{$icon}.jpg\" width=\"24\" height=\"24\" />";
+	}
 ?>

@@ -56,7 +56,7 @@ table td, table th {
 	border: 2px solid #484848;
 	background-color: #000;
 	color: #ccc;
-	vertical-align:text-top;
+	vertical-align: top;
 }
 
 table.calendar td small {
@@ -87,6 +87,20 @@ a.class-shaman		{color:#2359FF!important;}
 a.class-mage		{color:#68CCEF!important;}
 a.class-warlock		{color:#9382C9!important;}
 a.class-druid		{color:#FF7C0A!important;}
+
+a.q   {font-weight: bold; text-decoration: none; }
+a.q0  {color:#9d9d9d!important;}
+a.q1  {color:#ffffff!important;}
+a.q2  {color:#1eff00!important;}
+a.q3  {color:#0070dd!important;}
+a.q4  {color:#a335ee!important;}
+a.q5  {color:#ff8000!important;}
+a.q6  {color:#e5cc80!important;}
+a.q7  {color:#e5cc80!important;}
+a.q8  {color:#ffff98!important;}
+a.q9  {color:#71d5ff!important;}
+a.q10 {color:#ff0000!important;}
+
 
 </style>
 <script>
