@@ -412,6 +412,17 @@
 
 
 		#
+		# check it's headcount...
+		#
+
+		$from = (string) $xml['generatedFrom'];
+
+		if ($from != 'HeadCount'){
+			return 0;
+		}
+
+
+		#
 		# get raid day
 		#
 
@@ -433,6 +444,8 @@
 		#
 
 		db_query("UPDATE reports SET raid_day='$day' WHERE id=$id");
+
+		return 1;
 	}
 
 
