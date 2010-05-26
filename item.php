@@ -5,9 +5,16 @@
 	$item = db_fetch_hash(db_query("SELECT * FROM loots WHERE item_id='$id' ORDER BY date_drop ASC LIMIT 1"));
 
 	$page_title = "Item : $item[item_name]";
+	$title_icon = "http://static.wowhead.com/images/wow/icons/medium/{$item[item_icon]}.jpg";
 
 	include('head.txt');
 ?>
+
+<p>
+	(<a href="http://www.wowarmory.com/item-info.xml?i=<?=$item[item_id]?>">armory</a>, <a href="http://www.wowhead.com/item=<?=$item[item_id]?>">wowhead</a>)
+		
+</p>
+
 
 <h2>Drops</h2>
 
@@ -21,10 +28,14 @@
 <?
 	$result = db_query("SELECT * FROM loots WHERE item_id=$item[item_id] ORDER BY date_drop ASC");
 	while ($row = db_fetch_hash($result)){
+
+		$name_enc = AddSlashes($row[player_name]);
+		$player = db_fetch_hash(db_query("SELECT * FROM players WHERE name='$name_enc'"));
+		$row[class_id] = StrToLower(str_replace(' ', '', $player['class']));
 ?>
 	<tr>
 <? if ($row[ded] == 0){ ?>
-		<td><a href="player.php?name=<?=$row[player_name]?>"><?=$row[player_name]?></a></td>
+		<td><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[player_name]?></a></td>
 <? }else if ($row[ded] == 1){ ?>
 		<td>DE'd</td>
 <? }else if ($row[ded] == 2){ ?>

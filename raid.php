@@ -74,21 +74,24 @@ function lootItem(id,state){
 	<tr>
 		<th>&nbsp;</th>
 		<th>Item</th>
-		<th>Dropped by</th>
-		<th>Looted to</th>
+		<th>Dropped&nbsp;by</th>
+		<th>Looted&nbsp;to</th>
 		<th>Time</th>
 		<th>Edit</th>
 	</tr>
 <?
 	$result = db_query("SELECT * FROM loots WHERE raid_id=$raid[id] ORDER BY date_drop ASC");
 	while ($row = db_fetch_hash($result)){
+		$name_enc = AddSlashes($row[player_name]);
+		$player = db_fetch_hash(db_query("SELECT * FROM players WHERE name='$name_enc'"));
+		$row[class_id] = StrToLower(str_replace(' ', '', $player['class']));
 ?>
 	<tr>
-		<td><a href="http://www.wowhead.com/item=<?=$row[item_id]?>"><img src="http://static.wowhead.com/images/wow/icons/small/<?=$row[item_icon]?>.jpg" width="18" height="18" /></a></td>
-		<td><a href="item.php?id=<?=$row[item_id]?>"><?=$row[item_name]?></a></td>
+		<td style="padding: 2px;"><a href="item.php?id=<?=$row[item_id]?>" rel="item=<?=$row[item_id]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/<?=$row[item_icon]?>.jpg" width="24" height="24" /></a></td>
+		<td><a href="item.php?id=<?=$row[item_id]?>" rel="item=<?=$row[item_id]?>"><?=$row[item_name]?></a></td>
 		<td><?=$row[source]?></td>
 <? if ($row[ded] == 0){ ?>
-		<td id="looter-<?=$row[id]?>"><a href="player.php?name=<?=$row[player_name]?>"><?=$row[player_name]?></a></td>
+		<td id="looter-<?=$row[id]?>"><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[player_name]?></a></td>
 <? }else if ($row[ded] == 1){ ?>
 		<td id="looter-<?=$row[id]?>">DE'd</td>
 <? }else if ($row[ded] == 2){ ?>
@@ -138,10 +141,14 @@ function lootItem(id,state){
 	$result = db_query("SELECT * FROM attendance WHERE raid_id=$raid[id] ORDER BY player_name ASC");
 	while ($row = db_fetch_hash($result)){
 
+		$name_enc = AddSlashes($row[player_name]);
+		$player = db_fetch_hash(db_query("SELECT * FROM players WHERE name='$name_enc'"));
+		$row[class_id] = StrToLower(str_replace(' ', '', $player['class']));
+
 		$percent = min(100, round(100 * ($row[time_raid]+$row[time_wait]+60) / $duration));
 ?>
 	<tr>
-		<td><a href="player.php?name=<?=$row[player_name]?>"><?=$row[player_name]?></a></td>
+		<td><a href="player.php?name=<?=$row[player_name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[player_name]?></a></td>
 		<td style="text-align: right;"><?=format_period($row[time_raid], 1)?></td>
 		<td style="text-align: right;"><?=format_period($row[time_wait], 1)?></td>
 		<td style="text-align: right;"><?=format_period($row[time_offline], 1)?></td>

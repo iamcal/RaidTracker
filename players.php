@@ -12,6 +12,7 @@
 
 <table border="1">
 	<tr>
+		<th>&nbsp;</th>
 		<th>Player</th>
 		<th>Class</th>
 		<th>Loots</th>
@@ -32,10 +33,42 @@
 
 	$result = db_query("SELECT * FROM players WHERE guild='The Eternal' ORDER BY name ASC");
 	while ($row = db_fetch_hash($result)){
+		$row[class_id] = StrToLower(str_replace(' ', '', $row['class']));
 ?>
 	<tr>
-		<td><a href="player.php?name=<?=$row[name]?>"><?=$row[name]?></a></td>
+		<td style="padding: 2px;"><a href="player.php?name=<?=$row[name]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/class_<?=$row[class_id]?>.jpg" width="24" height="24" /></a></td>
+		<td><a href="player.php?name=<?=$row[name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[name]?></a></td>
 		<td><?=$row['class']?></td>
+		<td style="text-align: center"><?=intval($loots[$row[name]])?></td>
+		<td style="text-align: center"><?=intval($raids[$row[name]])?></td>
+	</tr>
+<?
+	}
+?>
+</table>
+
+
+<h2>Others</h2>
+
+<table border="1">
+	<tr>
+		<th>&nbsp;</th>
+		<th>Player</th>
+		<th>Class</th>
+		<th>Guild</th>
+		<th>Loots</th>
+		<th>Raids</th>
+	</tr>
+<?
+	$result = db_query("SELECT * FROM players WHERE guild!='The Eternal' ORDER BY name ASC");
+	while ($row = db_fetch_hash($result)){
+		$row[class_id] = StrToLower(str_replace(' ', '', $row['class']));
+?>
+	<tr>
+		<td style="padding: 2px;"><a href="player.php?name=<?=$row[name]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/class_<?=$row[class_id]?>.jpg" width="24" height="24" /></a></td>
+		<td><a href="player.php?name=<?=$row[name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[name]?></a></td>
+		<td><?=$row['class']?></td>
+		<td>&lt;<?=$row[guild]?$row[guild]:'...'?>&gt;</td>
 		<td style="text-align: center"><?=intval($loots[$row[name]])?></td>
 		<td style="text-align: center"><?=intval($raids[$row[name]])?></td>
 	</tr>
