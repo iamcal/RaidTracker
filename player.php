@@ -197,7 +197,7 @@
 	</tr>
 <?
 	}
-	if (!db_num_rows($result)){
+	if (!count($loots)){
 ?>
 	<tr>
 		<td colspan="5" style="text-align: center;"><i>No items looted</i></td>
