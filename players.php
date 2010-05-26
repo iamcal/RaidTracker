@@ -36,7 +36,7 @@
 		$row[class_id] = StrToLower(str_replace(' ', '', $row['class']));
 ?>
 	<tr>
-		<td style="padding: 2px;"><a href="player.php?name=<?=$row[name]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/class_<?=$row[class_id]?>.jpg" width="24" height="24" /></a></td>
+		<td style="padding: 2px;"><a href="player.php?name=<?=$row[name]?>"><?=insert_icon("class_$row[class_id]")?></a></td>
 		<td><a href="player.php?name=<?=$row[name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[name]?></a></td>
 		<td><?=$row['class']?></td>
 		<td style="text-align: center"><?=intval($loots[$row[name]])?></td>
@@ -65,7 +65,7 @@
 		$row[class_id] = StrToLower(str_replace(' ', '', $row['class']));
 ?>
 	<tr>
-		<td style="padding: 2px;"><a href="player.php?name=<?=$row[name]?>"><img src="http://static.wowhead.com/images/wow/icons/medium/class_<?=$row[class_id]?>.jpg" width="24" height="24" /></a></td>
+		<td style="padding: 2px;"><a href="player.php?name=<?=$row[name]?>"><?=insert_icon("class_$row[class_id]")?></a></td>
 		<td><a href="player.php?name=<?=$row[name]?>" class="class-<?=$row[class_id]?> class-link"><?=$row[name]?></a></td>
 		<td><?=$row['class']?></td>
 		<td>&lt;<?=$row[guild]?$row[guild]:'...'?>&gt;</td>
