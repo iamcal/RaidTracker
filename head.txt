@@ -163,6 +163,7 @@ function ajaxify(url, args, handler){
 		'raids'		=> array('Raids', 'raids.php'),
 		'items'		=> array('Items', 'items.php'),
 		'players'	=> array('Players', 'players.php'),
+		'roster'	=> array('Roster Changes', 'roster.php'),
 		'import'	=> array('Import Raid', 'import.php'),
 	);
 
