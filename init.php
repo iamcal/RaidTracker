@@ -21,6 +21,9 @@
 		if ($zone == 'Naxxramas') $zone = 'Naxx';
 		if ($zone == 'Trial of the Crusader') $zone = 'ToC';
 
+		if ($zone == 'Blackwing Descent') $zone = 'BWD';
+
+
 		return "$zone $dif";
 	}
 
@@ -68,9 +71,12 @@
 		return $date; # error!
 	}
 
-	function get_calendar_weeks(){
+	function get_calendar_weeks($first=null){
 
-		list($first) = db_fetch_list(db_query("SELECT MIN(day) FROM raids"));
+		if (!$first){
+			list($first) = db_fetch_list(db_query("SELECT MIN(day) FROM raids"));
+		}
+
 		$last = date('Y-m-d');
 		$week = get_raid_week($first);
 		#$week = get_raid_week('2010-05-02');
@@ -133,7 +139,7 @@
 
 		$from = (string) $xml['generatedFrom'];
 
-		if ($from != 'HeadCount'){
+		if ($from != 'HeadCount2'){
 			return 0;
 		}
 

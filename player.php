@@ -22,7 +22,11 @@
 		
 </p>
 
-<h2>ICC 25 Attendance</h2>
+<? if ($_GET['all']){ ?>
+<h2>Lich King &amp; Cataclysm Raid Attendance</h2>
+<? }else{ ?>
+<h2>Cataclysm Raid Attendance</h2>
+<? } ?>
 
 <?
 	#
@@ -65,7 +69,7 @@
 	# build calendar
 	#
 
-	$weeks = get_calendar_weeks();
+	$weeks = get_calendar_weeks($_GET['all'] ? 0 : '2011-01-04');
 
 	$all_raids = array();
 	$result = db_query("SELECT * FROM raids");
@@ -95,10 +99,10 @@
 			if (is_array($all_raids[$day])){
 				foreach ($all_raids[$day] as $raid){
 
-					if ($raid[zone] == 'Icecrown Citadel' && $raid[difficulty] == '25 Player'){
+					#if ($raid[zone] == 'Icecrown Citadel' && $raid[difficulty] == '25 Player'){
 
 						$days[$day_idx][$week_idx] = array($raid[duration], $raid[attendance], intval($loots_by_raid[$raid[id]]));
-					}
+					#}
 				}
 			}
 
@@ -120,6 +124,7 @@
 		$loots		= 0;
 
 		$c = 0;
+		if (is_array($day))
 		foreach ($day as $row){
 
 			if ($row[0]){
@@ -175,6 +180,12 @@
 		<td><?=display_attendance($days[6], 52)?></td>
 	</tr>
 </table>
+
+<? if ($_GET['all']){ ?>
+<p><a href="player.php?name=<?=HtmlSpecialChars($_GET['name'])?>">Only show cataclysm raids...</a></p>
+<? }else{ ?>
+<p><a href="player.php?name=<?=HtmlSpecialChars($_GET['name'])?>&all=1">Include old raids...</a></p>
+<? } ?>
 
 
 <h2>Loots</h2>
@@ -233,7 +244,11 @@
 </table>
 
 
-<h2>Calendar</h2>
+<? if ($_GET['all']){ ?>
+<h2>Raid Calendar</h2>
+<? }else{ ?>
+<h2>Cataclysm Calendar</h2>
+<? } ?>
 
 <table class="calendar" width="100%">
 	<tr>

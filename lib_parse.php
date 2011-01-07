@@ -573,7 +573,7 @@
 
 		$from = (string) $xml['generatedFrom'];
 
-		if ($from != 'HeadCount'){
+		if ($from != 'HeadCount2'){
 			$data[bad_xml]++;
 			return;
 		}
