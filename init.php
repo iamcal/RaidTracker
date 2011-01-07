@@ -30,8 +30,20 @@
 	function format_period($secs, $compact=0){
 
 		$mins = round($secs / 60);
+
+		$days = floor($mins / (60 * 24));
+		$mins -= $days * 60 * 24;
+
 		$hours = floor($mins / 60);
 		$mins -= $hours * 60;
+
+		if ($days){
+			if ($compact){
+				return "{$days}d {$hours}h {$mins}m";
+			}else{
+				return "$days days, $hours hours, $mins minutes";
+			}
+		}
 
 		if ($hours){
 			if ($compact){
