@@ -22,6 +22,8 @@
 		if ($zone == 'Trial of the Crusader') $zone = 'ToC';
 
 		if ($zone == 'Blackwing Descent') $zone = 'BWD';
+		if ($zone == 'Baradin Hold') $zone = 'BH';
+		if ($zone == 'The Bastion of Twilight') $zone = 'BoT';
 
 
 		return "$zone $dif";
